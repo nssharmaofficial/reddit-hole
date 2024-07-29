@@ -1,0 +1,34 @@
+# ----------------------------------------------------------
+[paths]
+background='$BACKGROUND'
+# ----------------------------------------------------------
+[RedditCredential]
+client_id='$REDDIT_CLIENT_ID'
+client_secret='$REDDIT_CLIENT_SECRET'
+user_agent="$REDDIT_USER_AGENT"
+username="$REDDIT_USERNAME"
+passkey="$REDDIT_PASSKEY"
+# ----------------------------------------------------------
+[AmazonAWSCredential]
+aws_access_key_id='$AWS_ACCESS_KEY_ID'
+aws_secret_access_key='$AWS_SECRET_ACCESS_KEY'
+region_name='$AWS_REGION_NAME'
+# ----------------------------------------------------------
+[Reddit]
+user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+subreddit='AskReddit'
+topn_comments=10
+max_comment_length=300
+min_comment_length=10
+# ----------------------------------------------------------
+[settings]
+storymode=false
+opacity = 0.75
+resolution_w = 1920
+resolution_h = 1080
+pause=0.6
+multiple_voices=false
+voice_id='Matthew'
+total_video_duration=59
+theme="dark"
+zoom = 1.25
