@@ -1,19 +1,18 @@
 # reddit-hole 🐰
 
-### Let me ask you:
+<img src="docs/reddit-banner.png" alt="reddit-create-app" width="400"/>
+
+**Let me ask you:**
 
 - 🙋 Would you like to start uploading the trendy Reddit videos on some platform too? 
 - 😨 Are you overwhelmed by the existing solution of [RedditVideoMakerBot](https://github.com/elebumm/RedditVideoMakerBot) as it lacks readability and it is hard to modify it on your own?
 - 😴 Are you tired of debugging all the issues of the simpler version of it [YoutubeAutomation-Reddit](https://github.com/aahashemi/YouTubeAutomation-Reddit/tree/main)?
 
-<img src="docs/reddit-banner.png" alt="reddit-create-app" width="400"/>
-
-### If you replied ⭐ **yes** ⭐ to any of the question above, this is the right place for you! Why this project stands out?
+**If you replied ⭐ *yes* ⭐ to any of the question above, this is the right place for you! Why this project stands out?**
 
 - 😏 option to choose from creating long "storymode" videos with captions or shorts with the comments' screenshots
 - 📒 proper code documentation and readability
 - ✅ keeping it simple but configurable (easy to contribute!)
-
 
 ## Examples 🎥
 
