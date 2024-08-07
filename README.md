@@ -91,7 +91,6 @@ reddit-hole/
       # .env
       REDDIT_CLIENT_ID=
       REDDIT_CLIENT_SECRET=
-      REDDIT_USER_AGENT="Accessing Reddit Threads"
       REDDIT_USERNAME=
       REDDIT_PASSKEY=
       ```

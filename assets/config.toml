@@ -5,7 +5,6 @@ background='$BACKGROUND'
 [RedditCredential]
 client_id='$REDDIT_CLIENT_ID'
 client_secret='$REDDIT_CLIENT_SECRET'
-user_agent="$REDDIT_USER_AGENT"
 username="$REDDIT_USERNAME"
 passkey="$REDDIT_PASSKEY"
 # ----------------------------------------------------------
@@ -15,7 +14,6 @@ aws_secret_access_key='$AWS_SECRET_ACCESS_KEY'
 region_name='$AWS_REGION_NAME'
 # ----------------------------------------------------------
 [Reddit]
-user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 subreddit='AskReddit'
 topn_comments=10
 max_comment_length=300

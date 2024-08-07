@@ -22,7 +22,7 @@ def login() -> Reddit:
         reddit = praw.Reddit(
             client_id=my_config['RedditCredential']['client_id'],
             client_secret=my_config['RedditCredential']['client_secret'],
-            user_agent=my_config['RedditCredential']['user_agent'],
+            user_agent="Accessing Reddit Threads",
             username=my_config["RedditCredential"]["username"],
             password=my_config["RedditCredential"]["passkey"],
             check_for_async=False
@@ -154,7 +154,7 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
             color_scheme=theme,
             viewport=ViewportSize(width=W, height=H),
             device_scale_factor=dsf,
-            user_agent=my_config["RedditCredential"]["user_agent"]
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
         )
 
         with open(f"./assets/cookie-{theme}-mode.json", encoding="utf-8") as cookie_file:

@@ -41,7 +41,6 @@ def load_config() -> dict:
 
     config['RedditCredential']['client_id'] = os.getenv('REDDIT_CLIENT_ID')
     config['RedditCredential']['client_secret'] = os.getenv('REDDIT_CLIENT_SECRET')
-    config['RedditCredential']['user_agent'] = os.getenv('REDDIT_USER_AGENT')
     config['RedditCredential']['username'] = os.getenv('REDDIT_USERNAME')
     config['RedditCredential']['passkey'] = os.getenv('REDDIT_PASSKEY')
 
