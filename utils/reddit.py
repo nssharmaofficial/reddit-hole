@@ -27,7 +27,7 @@ def login() -> Reddit:
             password=my_config["RedditCredential"]["passkey"],
             check_for_async=False
         )
-        print("Logged in to Reddit successfully!")
+        print("Bot logged in to Reddit successfully!")
         return reddit
     except Exception as e:
         print(f"Failed to login to Reddit: {e}")
@@ -163,12 +163,14 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
             context.add_cookies(cookies)
 
         # Open a new page and log in to Reddit
+        print("Opening Reddit...")
         page = context.new_page()
         page.goto("https://www.reddit.com/login", timeout=0)
         page.set_viewport_size(ViewportSize(width=1920, height=1080))
         page.wait_for_load_state()
 
         # Fill in login credentials and submit
+        print("Logging into Reddit...")
         page.locator('input[name="username"]').fill(my_config["RedditCredential"]["username"])
         page.locator('input[name="password"]').fill(my_config["RedditCredential"]["passkey"])
         page.get_by_role("button", name="Log In").click()
@@ -180,18 +182,22 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
             page.reload()
 
         # Navigate to the Reddit thread
+        print("Navigating to Reddit thread...")
         page.goto(f"https://new.reddit.com{reddit_thread.permalink}", timeout=0)
         page.set_viewport_size(ViewportSize(width=W, height=H))
-        page.wait_for_timeout(10000)
+        page.wait_for_timeout(5000)
 
         # Wait for the dropdown menu to be visible and click it
+        print("Switching to the light/dark mode...")
         dropdown_menu_selector = "#USER_DROPDOWN_ID > span.DFKWwVItcycZV1bKUOyay > i"
         page.wait_for_selector(dropdown_menu_selector)
         page.locator(dropdown_menu_selector).click()
+        page.wait_for_timeout(2000)
 
         # Locate and click the dark mode button
         dark_mode_button_selector = "button[aria-checked='false'][role='switch']"
         dark_mode_button = page.locator(dark_mode_button_selector)
+        page.wait_for_timeout(2000)
 
         # Ensure the dark mode button is visible
         if dark_mode_button.is_visible():
