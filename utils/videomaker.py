@@ -122,7 +122,6 @@ def make_final_video(
 
         # Create text clips for subtitles
         text_clips = []
-        screenshot_width = int((W * 70) // 100)
         for start, end, text in all_captions:
             text_clip = (TextClip(txt=text,
                                   font='Ubuntu-Mono-Bold',
@@ -136,7 +135,6 @@ def make_final_video(
                         .set_position(('center', 'center'))
                         .set_duration(end - start)
                         .set_start(start))
-            text_clip = resize(text_clip, width=screenshot_width)
             text_clips.append(text_clip)
 
         text_concat = concatenate_videoclips(text_clips)
