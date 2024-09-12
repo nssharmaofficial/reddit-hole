@@ -77,6 +77,16 @@ def sanitize_text(text: str) -> str:
     result = re.sub(r'\(\d+\s?[MFmf]\)|\d+\s?[MFmf]', '', result)
     result = ' '.join(result.split())
 
+    # Convert y/o to years old
+    # Convert w/ and w/o to with and without
+    patterns = {
+        r'\by/o\b': 'years old',
+        r'\bw/\b': 'with',
+        r'\bw/o\b': 'without'
+    }
+    for pattern, replacement in patterns.items():
+        result = re.sub(pattern, replacement, result)
+
     # Replace "/" with "or"
     result = re.sub(r'/', ' or', result)
 
