@@ -74,23 +74,19 @@ def main():
         thread_body = sanitize_text(thread.selftext)
 
         body_audio_paths = []
-        if len(thread_body) > 2000:
+        if len(thread_body) >= 4000:
             print("Splitting too much big text...")
             thread_body_chunks = split_text(text=thread_body)
             for i, thread_body_chunk in enumerate(thread_body_chunks):
                 body_audio_path = f'{thread_id_path}/mp3/body_{i}.mp3'
                 body_audio_paths.append(body_audio_path)
                 create_tts(text=thread_body_chunk, path=body_audio_path)
-        elif len(thread_body) < 1000:
+        elif len(thread_body) < 4000:
             print("Post too short. Exiting...")
             db = load_database()
             db.insert({'id': thread.id, 'title': thread.title})
             db.close()
             exit()
-        else:
-            body_audio_path = f'{thread_id_path}/mp3/body.mp3'
-            body_audio_paths.append(body_audio_path)
-            create_tts(text=thread_body, path=body_audio_path)
 
         # Get the duration of the title TTS
         total_video_duration = 0
