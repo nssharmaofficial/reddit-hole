@@ -49,10 +49,11 @@ def get_thread(reddit: Reddit, subreddit: str) -> Submission:
     subreddit_instance = reddit.subreddit(subreddit)
 
     # Get the top threads of the week
-    threads = subreddit_instance.top('week')
+    threads = subreddit_instance.top('month')
 
-    # Sort threads based on the number of upvotes in descending order
-    sorted_threads = sorted(threads, key=lambda x: x.score, reverse=True)
+    # Filter out NSFW threads and sort by the number of upvotes in descending order
+    filtered_threads = [thread for thread in threads if not thread.over_18]
+    sorted_threads = sorted(filtered_threads, key=lambda x: x.score, reverse=True)
 
     # Load the database
     db = load_database()
@@ -187,72 +188,40 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
         page.set_viewport_size(ViewportSize(width=W, height=H))
         page.wait_for_timeout(5000)
 
-        # Wait for the dropdown menu to be visible and click it
-        print("Switching to the light/dark mode...")
-        dropdown_menu_selector = "#USER_DROPDOWN_ID > span.DFKWwVItcycZV1bKUOyay > i"
-        page.wait_for_selector(dropdown_menu_selector)
-        page.locator(dropdown_menu_selector).click()
-        page.wait_for_timeout(2000)
-
-        # Locate and click the dark mode button
-        dark_mode_button_selector = "button[aria-checked='false'][role='switch']"
-        dark_mode_button = page.locator(dark_mode_button_selector)
-        page.wait_for_timeout(2000)
-
-        # Ensure the dark mode button is visible
-        if dark_mode_button.is_visible():
-            is_dark_mode_enabled = dark_mode_button.get_attribute("aria-checked") == "true"
-            if theme == "dark" and not is_dark_mode_enabled:
-                dark_mode_button.click()
-            elif theme == "light" and is_dark_mode_enabled:
-                dark_mode_button.click()
-        page.wait_for_timeout(2000)
-
-        # Proceed with nsfw
-        nsfw_proceed_button = (
-            "#t3_12hmbug > div > div._3xX726aBn29LDbsDtzr_6E._1Ap4F5maDtT1E1YuCiaO0r"
-            ".D3IL3FD0RFy_mkKLPwL4 > div > div > button"
-        )
-        if page.locator(nsfw_proceed_button).is_visible():
-            page.locator(nsfw_proceed_button).click()
-            page.wait_for_load_state()
-
         # Take screenshot of the post content
         op_path = f"./assets/temp/{reddit_thread.id}/png/title.png"
         if my_config["settings"]["zoom"] != 1:
             zoom = my_config["settings"]["zoom"]
             page.evaluate(f"document.body.style.zoom={zoom}")
-            location = page.locator('[data-test-id="post-content"]').bounding_box()
+            location = page.locator('shreddit-post[class*="block"]').bounding_box()
             for key in location:
                 location[key] = float("{:.2f}".format(location[key] * zoom))
             page.screenshot(clip=location, path=op_path)
-            location = page.locator('[data-adclicklocation="title"]').bounding_box()
-            for key in location:
-                location[key] = float("{:.2f}".format(location[key] * zoom))
         else:
-            page.locator('[data-test-id="post-content"]').screenshot(path=op_path)
+            page.locator('shreddit-post[class*="block"]').screenshot(path=op_path)
         print("Saved: ", op_path)
-        # print("Screenshot for OP completed")
 
         # Take screenshots of the comments
         for idx, comment in enumerate(reddit_comments):
             comments_path = f"./assets/temp/{reddit_thread.id}/png/{idx}.png"
 
-            if page.locator('[data-testid="content-gate"]').is_visible():
-                page.locator('[data-testid="content-gate"] button').click()
-
             page.goto(f'https://new.reddit.com{comment.permalink}', timeout=0)
             if my_config["settings"]["zoom"] != 1:
                 zoom = my_config["settings"]["zoom"]
                 page.evaluate(f"document.body.style.zoom={zoom}")
-                location = page.locator(f"#t1_{comment.id}").bounding_box()
+                # location = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"][depth="0"]').bounding_box()
+                all_comment_section = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]')
+                location = all_comment_section.locator(f"#t1_{comment.id}-comment-rtjson-content").bounding_box()
                 for key in location:
                     location[key] = float("{:.2f}".format(location[key] * zoom))
                 page.screenshot(clip=location, path=comments_path)
             else:
-                page.locator(f"#t1_{comment.id}").screenshot(path=comments_path)
+                all_comment_section = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]')
+                all_comment_section.locator(f"#t1_{comment.id}-comment-rtjson-content").screenshot(path=comments_path)
+
+                # TODO: there are shreddit-comment within shredit-comment, I do not know how to exclude them yet, not working
+                # page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]:nth-of-type(1)').screenshot(path=comments_path)
             print("Saved: ", comments_path)
-            # print(f"Screenshot for {idx + 1} comment out of {len(reddit_comments)}")
 
         browser.close()
 
