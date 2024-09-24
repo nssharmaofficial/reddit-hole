@@ -189,6 +189,7 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
         page.wait_for_timeout(5000)
 
         # Take screenshot of the post content
+        # (not used in the final video - using fancy title instead)
         op_path = f"./assets/temp/{reddit_thread.id}/png/title.png"
         if my_config["settings"]["zoom"] != 1:
             zoom = my_config["settings"]["zoom"]
@@ -207,20 +208,16 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
 
             page.goto(f'https://new.reddit.com{comment.permalink}', timeout=0)
             if my_config["settings"]["zoom"] != 1:
+                page.locator("button[aria-controls=\"comment-children\"]").first.click()
                 zoom = my_config["settings"]["zoom"]
                 page.evaluate(f"document.body.style.zoom={zoom}")
-                # location = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"][depth="0"]').bounding_box()
-                all_comment_section = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]')
-                location = all_comment_section.locator(f"#t1_{comment.id}-comment-rtjson-content").bounding_box()
+                location = page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").bounding_box()
                 for key in location:
                     location[key] = float("{:.2f}".format(location[key] * zoom))
                 page.screenshot(clip=location, path=comments_path)
             else:
-                all_comment_section = page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]')
-                all_comment_section.locator(f"#t1_{comment.id}-comment-rtjson-content").screenshot(path=comments_path)
-
-                # TODO: there are shreddit-comment within shredit-comment, I do not know how to exclude them yet, not working
-                # page.locator(f'shreddit-comment[thingid="t1_{comment.id}"]:nth-of-type(1)').screenshot(path=comments_path)
+                page.locator("button[aria-controls=\"comment-children\"]").first.click()
+                page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").screenshot(path=comments_path)
             print("Saved: ", comments_path)
 
         browser.close()
