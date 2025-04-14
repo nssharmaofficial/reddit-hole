@@ -208,16 +208,18 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
 
             page.goto(f'https://new.reddit.com{comment.permalink}', timeout=0)
             if my_config["settings"]["zoom"] != 1:
-                page.locator("button[aria-controls=\"comment-children\"]").first.click()
+                # page.locator("button[aria-controls=\"comment-children\"]").first.click()
                 zoom = my_config["settings"]["zoom"]
                 page.evaluate(f"document.body.style.zoom={zoom}")
-                location = page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").bounding_box()
+                # location = page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").bounding_box()
+                location = page.locator(f"#t1_{comment.id}-comment-rtjson-content").bounding_box()
                 for key in location:
                     location[key] = float("{:.2f}".format(location[key] * zoom))
                 page.screenshot(clip=location, path=comments_path)
             else:
-                page.locator("button[aria-controls=\"comment-children\"]").first.click()
-                page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").screenshot(path=comments_path)
+                # page.locator("button[aria-controls=\"comment-children\"]").first.click()
+                # page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").screenshot(path=comments_path)
+                location = page.locator(f"#t1_{comment.id}-comment-rtjson-content").bounding_box()
             print("Saved: ", comments_path)
 
         browser.close()

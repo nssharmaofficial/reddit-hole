@@ -170,6 +170,10 @@ def make_final_video(
         image_concat = concatenate_videoclips(image_clips)
         final_video = CompositeVideoClip([background_clip, image_concat.set_position("center")])
 
+    else:
+        print("Something went wrong.")
+        exit()
+
     # Add the audio to the final video
     final_video = final_video.set_audio(audio_composite)
 
