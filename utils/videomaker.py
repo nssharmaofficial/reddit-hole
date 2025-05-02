@@ -38,6 +38,12 @@ def prepare_background(length: int, W: int, H: int) -> CompositeVideoClip:
     video = VideoFileClip(my_config['paths']['background']).without_audio()
     video_duration = video.duration
 
+    # Check if the video is shorter than the required length
+    if video_duration < length:
+        print(f"Background video is shorter than the required length ({length} seconds).")
+        print("Please provide a longer background video.")
+        exit(1)
+
     # Select a random start time within the background video
     random_start = random.randint(0, int(video_duration - length))
     vid = video.subclip(random_start, random_start + length)
