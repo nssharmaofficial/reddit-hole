@@ -193,7 +193,7 @@ def main():
     db.close()
 
     # Remove the temporary directory at the end
-    shutil.rmtree("/assets/temp")
+    shutil.rmtree("./assets/temp")
 
     print("Done! See result in the results folder!")
 

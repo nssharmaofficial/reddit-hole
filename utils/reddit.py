@@ -168,14 +168,14 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
         page = context.new_page()
         page.goto("https://www.reddit.com/login", timeout=0)
         page.set_viewport_size(ViewportSize(width=1920, height=1080))
-        page.wait_for_load_state()
+        page.wait_for_load_state('load')
 
         # Fill in login credentials and submit
         print("Logging into Reddit...")
         page.locator('input[name="username"]').fill(my_config["RedditCredential"]["username"])
         page.locator('input[name="password"]').fill(my_config["RedditCredential"]["passkey"])
         page.get_by_role("button", name="Log In").click()
-        page.wait_for_timeout(5000)
+        page.wait_for_load_state('load')
 
         # Handle Reddit redesign opt-out if necessary
         if page.locator("#redesign-beta-optin-btn").is_visible():
@@ -186,7 +186,7 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
         print("Navigating to Reddit thread...")
         page.goto(f"https://new.reddit.com{reddit_thread.permalink}", timeout=0)
         page.set_viewport_size(ViewportSize(width=W, height=H))
-        page.wait_for_timeout(5000)
+        page.wait_for_load_state('load')
 
         # Take screenshot of the post content
         # (not used in the final video - using fancy title instead)
@@ -207,6 +207,7 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
             comments_path = f"./assets/temp/{reddit_thread.id}/png/{idx}.png"
 
             page.goto(f'https://new.reddit.com{comment.permalink}', timeout=0)
+            page.wait_for_load_state('load')
             if my_config["settings"]["zoom"] != 1:
                 # page.locator("button[aria-controls=\"comment-children\"]").first.click()
                 zoom = my_config["settings"]["zoom"]
@@ -220,6 +221,7 @@ def get_screenshots_of_reddit_posts(reddit_thread: Submission, reddit_comments: 
                 # page.locator("button[aria-controls=\"comment-children\"]").first.click()
                 # page.locator(f"shreddit-comment[thingid=\"t1_{comment.id}\"]").screenshot(path=comments_path)
                 location = page.locator(f"#t1_{comment.id}-comment-rtjson-content").bounding_box()
+                page.screenshot(clip=location, path=comments_path)
             print("Saved: ", comments_path)
 
         browser.close()
